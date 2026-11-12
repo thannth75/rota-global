@@ -2940,7 +2940,7 @@ async function openUserWorkspace(user){
  if(!user)return;
  if(authUser?.id===user.id&&document.body.classList.contains("authenticated"))return;
  if(workspaceOpening)return workspaceOpening;
- workspaceOpening=hydrateWorkspace(user).finally(()=>{workspaceOpening=null});
+ workspaceOpening=hydrateWorkspace(user).then(()=>{initGlobalJobCenter()}).finally(()=>{workspaceOpening=null});
  return workspaceOpening;
 }
 async function resendConfirmation(){
@@ -3113,14 +3113,16 @@ async function acceptInviteFromUrl(){
 startAuth();
 
 /* Evidence-first global job search and application tracker */
+function escapeHtml(value){return String(value??"").replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch]))}
+function escapeAttr(value){return escapeHtml(value).replace(/\'/g,"&#39;")}
 function rgJobStoreKey(){return "global-job-leads-v1"}
-function loadGlobalJobLeads(){try{return JSON.parse(rgStore.getItem(rgJobStoreKey())||"[]")}catch(e){return []}}
-function saveGlobalJobLeadsData(rows){rgStore.setItem(rgJobStoreKey(),JSON.stringify(rows))}
+function loadGlobalJobLeads(){try{return JSON.parse(userStorage.getItem(rgJobStoreKey())||"[]")}catch(e){return []}}
+function saveGlobalJobLeadsData(rows){userStorage.setItem(rgJobStoreKey(),JSON.stringify(rows))}
 function buildGlobalJobSearch(){const country=document.getElementById("rgJobCountry")?.value||"Canada";const role=(document.getElementById("rgJobRole")?.value||"").trim();const term=document.getElementById("rgJobTerm")?.value||"visa sponsorship";const root=document.getElementById("rgJobSearchLinks");if(!role){root.innerHTML='<p class="muted">Informe a profissão para gerar a pesquisa.</p>';return}const q='"'+role+'" "'+term+'" "'+country+'"';const links=[["Google · descoberta","https://www.google.com/search?q="+encodeURIComponent(q+" jobs")],["LinkedIn · vagas","https://www.linkedin.com/jobs/search/?keywords="+encodeURIComponent(role+" "+term)+"&location="+encodeURIComponent(country)],["Indeed · vagas","https://www.indeed.com/jobs?q="+encodeURIComponent(role+" "+term)+"&l="+encodeURIComponent(country)]];root.innerHTML=links.map(([label,url])=>'<a href="'+url+'" target="_blank" rel="noopener">'+label+' ↗</a>').join("")+'<p class="muted" style="width:100%">Descoberta apenas. Confirme a vaga no site corporativo e a elegibilidade no portal oficial.</p>'}
 function saveGlobalJobLead(){const get=id=>document.getElementById(id)?.value.trim()||"";const company=get("rgLeadCompany"),role=get("rgLeadRole"),url=get("rgLeadUrl");if(!company||!role){alert("Informe empresa e cargo.");return}if(url&&!/^https:\/\//i.test(url)){alert("Use um link HTTPS válido.");return}const rows=loadGlobalJobLeads();rows.unshift({id:Date.now(),company,place:get("rgLeadPlace"),role,url,status:get("rgLeadStatus"),notes:get("rgLeadNotes")});saveGlobalJobLeadsData(rows);renderGlobalJobLeads();["rgLeadCompany","rgLeadPlace","rgLeadRole","rgLeadUrl","rgLeadNotes"].forEach(id=>document.getElementById(id).value="")}
 function deleteGlobalJobLead(id){if(!confirm("Excluir este registro?"))return;saveGlobalJobLeadsData(loadGlobalJobLeads().filter(x=>x.id!==id));renderGlobalJobLeads()}
 function renderGlobalJobLeads(){const root=document.getElementById("rgJobLeads");if(!root)return;const rows=loadGlobalJobLeads();root.innerHTML=rows.length?rows.map(x=>'<article class="rg-job-lead"><div><b>'+escapeHtml(x.company)+' · '+escapeHtml(x.role)+'</b><p>'+escapeHtml(x.place||"Local não informado")+' · '+escapeHtml(x.status)+'</p>'+(x.url?'<a href="'+escapeAttr(x.url)+'" target="_blank" rel="noopener">Abrir vaga ↗</a>':'')+(x.notes?'<p>'+escapeHtml(x.notes)+'</p>':'')+'</div><button class="secondary" type="button" onclick="deleteGlobalJobLead('+Number(x.id)+')">Excluir</button></article>').join(""):'<p class="muted">Nenhuma vaga registrada nesta conta.</p>'}
-function initGlobalJobCenter(){renderGlobalJobLeads();document.querySelectorAll("[data-rg-check]").forEach(el=>{const key="global-job-check-"+el.dataset.rgCheck;el.checked=rgStore.getItem(key)==="1";el.addEventListener("change",()=>rgStore.setItem(key,el.checked?"1":"0"))})}
+function initGlobalJobCenter(){renderGlobalJobLeads();document.querySelectorAll("[data-rg-check]").forEach(el=>{const key="global-job-check-"+el.dataset.rgCheck;el.checked=userStorage.getItem(key)==="1";el.addEventListener("change",()=>userStorage.setItem(key,el.checked?"1":"0"))})}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initGlobalJobCenter);else initGlobalJobCenter();
 
 </script>
