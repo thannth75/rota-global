@@ -557,6 +557,92 @@ body.authenticated #authGate{display:none}
 .group-panel #groupStatus{font-size:11px;margin-top:10px}.group-panel select{max-width:none}
 @media(max-width:760px){.auth-card{padding:22px}.group-controls{grid-template-columns:1fr}.group-panel-head{align-items:flex-start}.account-actions span{display:none}}
 
+
+/* ROTA GLOBAL — visual system refinement */
+:root{--bg:#f4f6fb;--card:#fff;--text:#182238;--muted:#66738a;--border:#e4e9f2;--blue:#315bd8;--navy:#101b37;--soft:#eef3ff;--shadow:0 8px 26px rgba(22,35,67,.055)}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:#f4f6fb}
+header{background:linear-gradient(110deg,#101b37 0%,#1b3266 100%);box-shadow:0 3px 18px rgba(13,26,54,.12)}
+.container{max-width:1560px;padding:28px 34px 56px}
+.page-heading{padding:4px 2px 16px;margin-bottom:8px}
+.page-heading h1{font-size:clamp(23px,2.3vw,30px);letter-spacing:-.04em;margin:0 0 5px}
+.page-heading p{color:#77839a;font-size:13px;line-height:1.6;margin:0}
+.profilebar{background:#fff;border:1px solid #e6eaf2;box-shadow:0 4px 16px rgba(22,35,67,.035);border-radius:14px;padding:12px 14px}
+.card{border-radius:17px;padding:22px;border-color:#e7ebf3;box-shadow:0 7px 24px rgba(20,35,70,.045);margin-bottom:18px}
+.card h2{font-size:19px;letter-spacing:-.035em;line-height:1.25}
+.card h3{font-size:15px;letter-spacing:-.02em}
+.grid{gap:16px}
+input,select,textarea{min-height:42px;border-color:#dce3ef;border-radius:10px;background:#fff}
+button,.btn{border-radius:10px;min-height:38px;transition:transform .15s,box-shadow .15s,background .15s}
+button:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(49,87,213,.13)}
+button.secondary:hover{background:#f5f7ff}
+section.active-section{animation:rgFade .22s ease}
+@keyframes rgFade{from{opacity:.45;transform:translateY(4px)}to{opacity:1;transform:none}}
+nav{box-shadow:5px 0 24px rgba(10,20,42,.08);padding:20px 13px 30px}
+nav .nav-group{padding:17px 12px 7px;color:#8493b8;letter-spacing:.14em}
+nav button{font-size:12px;padding:10px 12px;margin:3px 0}
+nav button.active{background:linear-gradient(100deg,#fff,#eef2ff);color:#18316e}
+.country-card,.atlas-country,.resource{border-radius:15px;border-color:#e4e9f2;box-shadow:0 4px 16px rgba(20,35,70,.035)}
+.atlas-hero{background:radial-gradient(circle at 90% 0%,rgba(105,144,255,.22),transparent 34%),linear-gradient(120deg,#101b37,#203d7c);color:#fff;border:0;padding:clamp(22px,4vw,38px)}
+.atlas-hero h2{font-size:clamp(23px,3vw,34px);max-width:760px;line-height:1.15;color:#fff}
+.atlas-hero p{color:#d6e0ff;max-width:850px;font-size:14px;line-height:1.7}
+.atlas-hero .atlas-eyebrow{color:#b9cbff;letter-spacing:.15em;font-weight:850;font-size:10px}
+.atlas-metrics>div{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px}
+.atlas-metrics b{color:#fff;font-size:26px}
+.atlas-metrics span{color:#d4def9}
+.atlas-search{display:grid;grid-template-columns:minmax(0,2fr) minmax(190px,1fr);gap:12px}
+.atlas-entry{border:1px solid #e5eaf3;border-radius:12px;padding:12px;background:#fff;min-width:0}
+.atlas-entry:hover{border-color:#9bb0f3;box-shadow:0 5px 16px rgba(49,87,213,.08)}
+.atlas-entry b{font-size:13px}.atlas-entry small{line-height:1.5}
+.atlas-country{padding:20px;margin:0 0 14px}
+.atlas-country h4{margin:16px 0 6px;color:#334b85;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.atlas-country p,.atlas-country li{font-size:13px;line-height:1.7;color:#4d5a70}
+.atlas-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.atlas-links a,.rg-resource-link{display:inline-flex;align-items:center;min-height:34px;padding:7px 10px;border:1px solid #dfe6f5;border-radius:9px;background:#f8faff;color:#284ca4;font-size:11px;font-weight:800;text-decoration:none}
+.rg-world-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.rg-focus-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.rg-focus-card{display:flex;flex-direction:column;gap:9px;padding:16px;border:1px solid #e2e8f3;border-radius:15px;background:linear-gradient(160deg,#fff,#f8faff);min-width:0}
+.rg-focus-card .flag{font-size:25px}.rg-focus-card b{font-size:14px}.rg-focus-card p{font-size:12px;color:#64718a;line-height:1.55;margin:0;flex:1}
+.rg-focus-card a{font-size:11px;font-weight:850;color:#3157c8;text-decoration:none}
+.rg-tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.rg-tool{padding:15px;border:1px solid #e4e9f2;border-radius:13px;background:#fff}
+.rg-tool b{display:block;font-size:13px;margin-bottom:5px}.rg-tool p{font-size:12px;line-height:1.6;color:#66738a;margin:0 0 9px}
+.rg-country-detail{margin-top:14px;padding:18px;border:1px solid #dce5f6;border-radius:14px;background:#f7f9ff}
+.rg-country-detail h3{margin:0 0 7px;font-size:16px}.rg-country-detail p{font-size:13px;line-height:1.65;color:#56637a}
+.rg-risk-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.rg-risk{padding:13px;border:1px solid #f0dfc0;border-radius:12px;background:#fffbf3;font-size:12px;line-height:1.6;color:#5c4a2a}
+.rg-section-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#7786a4;font-weight:900}
+@media(max-width:1100px){.rg-focus-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.rg-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:980px){
+ .container{padding:82px 16px 100px!important}
+ .page-heading{padding:4px 3px 12px}
+ .page-heading h1{font-size:23px}
+ .card{padding:17px;border-radius:15px;margin-bottom:13px}
+ .atlas-search{grid-template-columns:1fr}
+ .rg-focus-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .rg-tool-grid{grid-template-columns:1fr}
+ .rg-risk-list{grid-template-columns:1fr}
+ .atlas-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:560px){
+ .container{padding:78px 11px 96px!important}
+ .rg-focus-grid{grid-template-columns:1fr 1fr;gap:8px}
+ .rg-focus-card{padding:12px;border-radius:12px}
+ .rg-focus-card p{font-size:11px}
+ .atlas-hero{padding:22px 18px}
+ .atlas-hero h2{font-size:25px}
+ .atlas-metrics{gap:7px}
+ .atlas-metrics>div{padding:10px 8px}
+ .atlas-metrics b{font-size:21px}
+ .atlas-metrics span{font-size:10px}
+ .atlas-directory{grid-template-columns:1fr 1fr!important;gap:7px!important}
+ .atlas-entry{padding:10px}
+ .atlas-entry b{font-size:12px}
+ .atlas-entry small{font-size:10px}
+ .atlas-country{padding:15px}
+ .profilebar{gap:7px!important}
+ .profilebar button{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -1239,6 +1325,46 @@ body.authenticated #authGate{display:none}
   <h2>Atlas global de imigração, trabalho e vida familiar</h2>
   <p>O Atlas amplia a base original sem apagar os módulos e informações existentes. Ele separa países com pesquisa oficial estruturada de jurisdições ainda pendentes de validação. A indexação global não significa que todos os países já tenham uma análise migratória completa.</p>
   <div class="atlas-metrics"><div><b>249</b><span>jurisdições no índice ISO</span></div><div><b>7</b><span>perfis com rotas descritas nesta versão</span></div><div><b>4</b><span>destinos prioritários aprofundados com fontes oficiais recentes</span></div></div>
+ </div>
+
+ <div class="card">
+  <div class="rg-world-intro"><div><span class="rg-section-label">Estratégia de destinos</span><h2>Quatro países prioritários. Um radar mundial.</h2><p class="muted">Aprofundar os destinos prioritários sem fechar portas para oportunidades legais em outros países.</p></div><span class="badge green">Foco de pesquisa</span></div>
+  <div class="rg-focus-grid">
+   <article class="rg-focus-card"><span class="flag">🇨🇦</span><b>Canadá</b><p>Empregadores que recrutam no exterior, permissões, programas provinciais, direitos do trabalhador e caminhos de residência.</p><a href="#atlasglobal" onclick="document.querySelector('[data-code=&quot;CA&quot;]').scrollIntoView({behavior:'smooth',block:'start'});return false">Abrir dossiê Canadá →</a></article>
+   <article class="rg-focus-card"><span class="flag">🇮🇪</span><b>Irlanda</b><p>Critical Skills, General Employment Permit, ocupações elegíveis, empregadores e condições para dependentes.</p><a href="#atlasglobal" onclick="document.querySelector('[data-code=&quot;IE&quot;]').scrollIntoView({behavior:'smooth',block:'start'});return false">Abrir dossiê Irlanda →</a></article>
+   <article class="rg-focus-card"><span class="flag">🇦🇺</span><b>Austrália</b><p>Skilled visas, patrocínio empresarial, rotas regionais, avaliação profissional e proteção contra exploração.</p><a href="#atlasglobal" onclick="document.querySelector('[data-code=&quot;AU&quot;]').scrollIntoView({behavior:'smooth',block:'start'});return false">Abrir dossiê Austrália →</a></article>
+   <article class="rg-focus-card"><span class="flag">🇺🇸</span><b>Estados Unidos</b><p>EB-3 e outras categorias, empregadores patrocinadores, PERM, vistos temporários e verificação de ofertas.</p><a href="#atlasglobal" onclick="document.querySelector('[data-code=&quot;US&quot;]').scrollIntoView({behavior:'smooth',block:'start'});return false">Abrir dossiê EUA →</a></article>
+  </div>
+ </div>
+ <div class="card">
+  <span class="rg-section-label">Central de oportunidades</span><h2>Onde procurar trabalho e networking sem depender de intermediários</h2>
+  <p class="muted">Comece por serviços públicos e páginas oficiais. Plataformas privadas ajudam a encontrar vagas e contatos, mas não confirmam patrocínio de visto nem a legitimidade de cada anúncio.</p>
+  <div class="rg-tool-grid">
+   <div class="rg-tool"><b>🇨🇦 Canadá · Job Bank</b><p>Filtro oficial para candidatos que estão fora do Canadá e empregadores que recrutam internacionalmente.</p><a class="rg-resource-link" href="https://www.jobbank.gc.ca/findajob/foreign-candidates" target="_blank" rel="noopener">Vagas para candidatos estrangeiros ↗</a></div>
+   <div class="rg-tool"><b>🇮🇪 Irlanda · JobsIreland</b><p>Serviço público gratuito de emprego, orientação de currículo e correspondência de vagas.</p><a class="rg-resource-link" href="https://jobsireland.ie/" target="_blank" rel="noopener">Buscar vagas ↗</a></div>
+   <div class="rg-tool"><b>🇦🇺 Austrália · Workforce Australia</b><p>Portal nacional de emprego. Verifique separadamente se a vaga aceita candidatos offshore e oferece patrocínio elegível.</p><a class="rg-resource-link" href="https://www.workforceaustralia.gov.au/" target="_blank" rel="noopener">Abrir portal ↗</a></div>
+   <div class="rg-tool"><b>🇺🇸 EUA · SeasonalJobs</b><p>Portal do Department of Labor com oportunidades temporárias H-2A/H-2B; temporário não significa residência permanente.</p><a class="rg-resource-link" href="https://seasonaljobs.dol.gov/" target="_blank" rel="noopener">Consultar oportunidades ↗</a></div>
+   <div class="rg-tool"><b>🇪🇺 Europa · EURES</b><p>Vagas de serviços públicos europeus, condições de vida e trabalho e eventos de recrutamento. Não substitui autorização para não europeus.</p><a class="rg-resource-link" href="https://eures.europa.eu/" target="_blank" rel="noopener">Pesquisar na Europa ↗</a></div>
+   <div class="rg-tool"><b>🌍 Networking profissional</b><p>Encontre recrutadores e gestores diretamente. Pesquise empresa, função, cidade e termos como “visa sponsorship” ou “relocation”.</p><a class="rg-resource-link" href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener">LinkedIn Jobs ↗</a> <a class="rg-resource-link" href="https://www.linkedin.com/" target="_blank" rel="noopener">Networking ↗</a></div>
+  </div>
+ </div>
+ <div class="card">
+  <span class="rg-section-label">Proteção financeira e jurídica</span><h2>Filtro anti-golpe: antes de pagar ou assinar</h2>
+  <div class="notice"><b>Regra do Rota Global:</b> não pagar por promessa de emprego, patrocínio, LMIA, PERM, convite, vaga garantida ou aprovação de visto. Primeiro confirmar a regra oficial, a empresa, o recrutador, o contrato e quem legalmente pode cobrar cada taxa.</div>
+  <div class="rg-risk-list">
+   <div class="rg-risk"><b>1. Empregador verificável</b><br>Confirme razão social, endereço, domínio corporativo, registro empresarial e se a vaga aparece no canal oficial da empresa. Ligue para um contato obtido independentemente do anúncio.</div>
+   <div class="rg-risk"><b>2. Patrocínio real</b><br>Peça o nome jurídico do empregador, cargo, local, salário, horas, tipo de visto, número de processo quando aplicável e etapas que o empregador assumirá.</div>
+   <div class="rg-risk"><b>3. Taxas discriminadas</b><br>Separe taxas governamentais, exames, traduções e serviços opcionais. Não aceite valores “por fora”, dinheiro sem recibo ou cobrança para liberar uma vaga.</div>
+   <div class="rg-risk"><b>4. Contrato e moradia</b><br>Leia salário bruto, descontos, jornada, horas extras, alojamento, transporte, seguro, período de experiência, rescisão e condições para dependentes.</div>
+   <div class="rg-risk"><b>5. Profissional regulado</b><br>Se contratar advogado ou consultor, verifique licença no órgão regulador oficial do país. Não confie apenas em depoimentos, Instagram ou CNPJ.</div>
+   <div class="rg-risk"><b>6. Sinais de fraude</b><br>Urgência artificial, aprovação garantida, salário muito acima do mercado, entrevista inexistente, e-mail gratuito se passando por empresa, pagamento em cripto ou retenção de passaporte.</div>
+  </div>
+  <p class="muted">Proteções oficiais: <a href="https://www.canada.ca/en/employment-social-development/services/foreign-workers/protected-rights.html" target="_blank" rel="noopener">Canadá — empregador não pode cobrar taxas de recrutamento do trabalhador</a> · <a href="https://immi.homeaffairs.gov.au/visas/employing-and-sponsoring-someone/migrant-worker-protections" target="_blank" rel="noopener">Austrália — ilegal cobrar por patrocínio/recrutamento</a> · <a href="https://www.workplacerelations.ie/en/what_you_should_know/employer-obligations/employment-agencies/" target="_blank" rel="noopener">Irlanda — licenciamento de agências</a> · <a href="https://www.dol.gov/agencies/eta/foreign-labor" target="_blank" rel="noopener">EUA — Department of Labor</a>.</p>
+ </div>
+ <div class="card">
+  <span class="rg-section-label">Dossiê mundial</span><h2>O que cada país precisa ter para ser considerado uma opção real</h2>
+  <p class="muted">O índice inclui 249 jurisdições. Para não inventar leis, os países sem dossiê validado aparecem como “pesquisa pendente”. Cada ficha deve ser completada com fonte governamental e data de verificação antes de entrar no ranking.</p>
+  <div id="atlasCountryDetail" class="rg-country-detail"><h3>Selecione um país no diretório</h3><p>Você verá o status da pesquisa e os itens que precisam ser confirmados: visto de trabalho, residência, profissões, recrutamento internacional, idioma, salários, custo de vida, moradia, saúde, educação, dependentes, impostos, segurança e prevenção de golpes.</p></div>
  </div>
  <div class="card">
   <h2>Pesquisar qualquer país ou território</h2>
@@ -2524,11 +2650,26 @@ function renderAtlasDirectory(){
  document.getElementById("atlasCount").textContent=`${filtered.length} de ${atlasCountries.length} jurisdições`;
  root.innerHTML=filtered.map(([code,name])=>{
    const researched=atlasResearched.has(code);
-   const label=researched?"Perfil estruturado nesta versão":"Pesquisa oficial pendente";
-   const slug=code==="US"?"Estados Unidos":name;
-   return `<div class="atlas-entry ${researched?"researched":"pending"}"><b>${name}</b><small>${code} · ${label}</small>${researched?`<small><a href="#atlasglobal" onclick="document.querySelector('[data-code=\\\"${code}\\\"]').scrollIntoView({behavior:'smooth',block:'start'});return false">Ver perfil estruturado</a></small>`:`<small>Próxima etapa: validar imigração, trabalho, família, saúde, educação, custo e fontes governamentais.</small>`}</div>`;
+   const label=researched?"Dossiê disponível":"Pesquisa oficial pendente";
+   return `<button type="button" class="atlas-entry ${researched?"researched":"pending"}" style="text-align:left;color:inherit;cursor:pointer" onclick="openAtlasCountry('${code}')"><b>${name}</b><small>${code} · ${label}</small><small style="color:#3157c8;font-weight:800">Abrir ficha →</small></button>`;
  }).join("")||'<p class="muted">Nenhuma jurisdição encontrada.</p>';
 }
+
+function openAtlasCountry(code){
+ const item=atlasCountries.find(x=>x[0]===code);if(!item)return;
+ const [cc,name]=item;const researched=atlasResearched.has(cc);
+ const focus={CA:"Canadá",US:"Estados Unidos",AU:"Austrália",IE:"Irlanda"};
+ const root=document.getElementById("atlasCountryDetail");if(!root)return;
+ if(researched){
+  const card=document.querySelector('[data-code="'+cc+'"]');
+  if(card){card.scrollIntoView({behavior:"smooth",block:"start"});root.innerHTML='<h3>'+name+' · Dossiê existente</h3><p>Esta jurisdição já possui conteúdo estruturado no Atlas. A ficha detalhada aparece mais abaixo nesta página; confira as fontes oficiais e a data de revisão antes de tomar decisões.</p>';}
+  else root.innerHTML='<h3>'+name+'</h3><p>Há conteúdo estruturado, mas a ficha detalhada não foi localizada na tela. Revise o diretório de perfis.</p>';
+  return;
+ }
+ root.innerHTML='<h3>'+name+' · '+cc+'</h3><p><b>Status: pesquisa oficial pendente.</b> O Rota Global não vai apresentar regras migratórias inventadas nem prometer que esse país aceita trabalhadores do Brasil. Para transformar '+name+' em destino elegível, a pesquisa precisa documentar:</p><ol><li>Autoridade oficial de imigração e categorias de visto de trabalho/residência.</li><li>Se aceita candidatura offshore e se exige oferta, patrocínio, pontos ou autorização prévia.</li><li>Lista de ocupações, reconhecimento de diplomas/licenças e idioma.</li><li>Serviço público de emprego e empresas que recrutam internacionalmente.</li><li>Salário mínimo, salário típico por ocupação, impostos e custo de vida por cidade.</li><li>Saúde, escolas, moradia, segurança, dependentes e direitos trabalhistas.</li><li>Taxas oficiais, prazos, recursos de recurso/denúncia e sinais de fraude.</li><li>Data de verificação, links oficiais e evidência de cada afirmação.</li></ol><p><b>Como procurar sem intermediário:</b> use a página de carreiras da empresa e plataformas profissionais para localizar a vaga; depois confirme a autorização no portal oficial do governo e contate o empregador por um canal independente. A existência de vaga não prova patrocínio.</p><span class="badge amber">Não classificado como rota viável até validação</span>';
+ root.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
 document.getElementById("atlasSearch")?.addEventListener("input",renderAtlasDirectory);
 document.getElementById("atlasStatus")?.addEventListener("change",renderAtlasDirectory);
 renderAtlasDirectory();
