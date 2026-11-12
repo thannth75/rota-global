@@ -541,14 +541,16 @@ th{font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:#667085}
 @media(max-width:420px){.atlas-directory{grid-template-columns:1fr}.atlas-metrics{grid-template-columns:1fr}}
 
 
-.auth-gate{position:fixed;inset:0;z-index:2000;background:linear-gradient(135deg,#101828,#243c78);display:grid;place-items:center;padding:18px}
-.auth-card{width:min(100%,440px);background:#fff;border-radius:20px;padding:28px;box-shadow:0 24px 70px #0004}
-.auth-brand{font-weight:950;font-size:21px;letter-spacing:.05em;color:#101828}.auth-brand span{color:#3157d5}
+.auth-gate{position:fixed;inset:0;z-index:2000;background:radial-gradient(circle at 15% 10%,#294b91 0,transparent 38%),linear-gradient(135deg,#0b1220,#1c3264 58%,#14244b);display:grid;place-items:center;padding:clamp(12px,3vw,28px);overflow-y:auto}
+.auth-card{width:min(100%,520px);background:#fff;border:1px solid #ffffffaa;border-radius:26px;padding:clamp(22px,4vw,38px);box-shadow:0 28px 90px #0005}
+.auth-brand{display:flex;align-items:center;gap:11px;font-weight:950;font-size:clamp(22px,4vw,27px);letter-spacing:.045em;color:#101828}.auth-brand-mark{width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:linear-gradient(145deg,#315fdb,#173a9b);display:grid;place-items:center;box-shadow:0 7px 18px #3157d544}.auth-brand-mark svg{width:25px;height:25px}.auth-brand span{color:#3157d5}
 .auth-kicker{font-size:9px;font-weight:900;letter-spacing:.14em;color:#3157d5;margin:24px 0 8px}
-.auth-card h1{font-size:26px;margin:0 0 8px;color:#101828}.auth-copy{font-size:12px;line-height:1.6;color:#667085;margin-bottom:20px}
+.auth-card h1{font-size:clamp(26px,4vw,32px);line-height:1.15;margin:0 0 10px;color:#101828;letter-spacing:-.025em}.auth-copy{font-size:clamp(13px,2vw,15px);line-height:1.7;color:#667085;margin-bottom:22px}
 .auth-card label{display:block;margin:12px 0 5px}.auth-card input{width:100%}.auth-card form button{width:100%;margin-top:18px;min-height:46px}
 .auth-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.link-button{background:transparent!important;color:#3157d5!important;box-shadow:none!important;padding:5px!important;min-height:30px!important}
 .auth-message{font-size:12px;line-height:1.5;color:#344054;min-height:18px}.auth-card>small{font-size:10px;color:#667085;line-height:1.5}
+@media(max-width:600px){.auth-gate{align-items:start;padding:14px}.auth-card{width:100%;max-width:520px;margin:auto;border-radius:22px;padding:24px 20px}.auth-kicker{font-size:9px;line-height:1.5;margin-top:20px}.auth-card h1{font-size:27px}.auth-card input{min-height:50px;font-size:16px}.auth-card form button{min-height:52px}.auth-actions{gap:10px 14px}.auth-actions .link-button{padding:6px 4px!important;font-size:13px}.auth-card>small{font-size:11px}}
+@media(max-height:650px) and (min-width:601px){.auth-gate{place-items:start center}.auth-card{margin:12px auto}}
 body.authenticated #authGate{display:none}
 .account-actions{display:flex;align-items:center;gap:8px}.account-actions span{font-size:11px;color:#667085;max-width:220px;overflow:hidden;text-overflow:ellipsis}
 .group-panel{margin-bottom:18px}.group-panel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.group-panel-head h2{margin:4px 0}.group-controls{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-top:12px}
@@ -560,12 +562,12 @@ body.authenticated #authGate{display:none}
 <body>
 <div id="authGate" class="auth-gate">
  <div class="auth-card">
-  <div class="auth-brand">ROTA <span>GLOBAL</span></div>
+  <div class="auth-brand"><span class="auth-brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M6 22.5 13.2 8l5.1 10.1L26 6" stroke="white" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="22.5" r="2.3" fill="white"/><circle cx="26" cy="6" r="2.3" fill="white"/><path d="M18.5 23.5h7" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg></span><span>ROTA <span>GLOBAL</span></span></div>
   <p class="auth-kicker">PLANEJAMENTO INTERNACIONAL MULTIUSUÁRIO</p>
   <h1 id="authTitle">Entre na sua conta</h1>
   <p class="auth-copy">Cada adulto acessa com seu próprio e-mail. Seus dados pessoais e financeiros ficam separados dos outros usuários.</p>
   <form id="authForm" onsubmit="submitAuth(event)">
-   <label for="authEmail">E-mail</label><input id="authEmail" type="email" autocomplete="email" required placeholder="voce@email.com">
+   <label for="authEmail">E-mail</label><input id="authEmail" type="email" autocomplete="email" required value="nathan.pires755@gmail.com" placeholder="voce@email.com">
    <label for="authPassword">Senha</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo de 8 caracteres">
    <button id="authSubmit" type="submit">Entrar</button>
   </form>
@@ -2559,7 +2561,7 @@ async function submitAuth(event){
   }else{
    const {error}=await sb.auth.signInWithPassword({email,password}); if(error)throw error;
   }
- }catch(e){authMessage(e.message||"Não foi possível autenticar.",true)}
+ }catch(e){const raw=String(e.message||"");const rate=/rate.?limit|too many requests|request limit|over_email_send_rate_limit/i.test(raw);authMessage(rate?"O serviço de autenticação atingiu o limite temporário de solicitações. Aguarde um pouco antes de tentar novamente. Se continuar, verifique os limites de envio de e-mail no painel do Supabase.":(raw||"Não foi possível autenticar."),true)}
  finally{authBusy=false;document.getElementById("authSubmit").disabled=false}
 }
 async function resetPassword(){
