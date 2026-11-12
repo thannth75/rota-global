@@ -572,7 +572,8 @@ body.authenticated #authGate{display:none}
    <button id="authSubmit" type="submit">Entrar</button>
   </form>
   <div class="auth-actions"><button class="link-button" type="button" onclick="setAuthMode('signup')">Criar minha conta</button><button class="link-button" type="button" onclick="setAuthMode('login')">Já tenho conta</button><button class="link-button" type="button" onclick="resetPassword()">Esqueci minha senha</button></div>
-  <p id="authMessage" class="auth-message" role="status"></p>
+  <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+  <button id="resendConfirmation" class="link-button" type="button" style="display:none" onclick="resendConfirmation()">Reenviar e-mail de confirmação</button>
   <small>Não compartilhe sua senha. Convide outros adultos pelo espaço familiar depois de entrar.</small>
  </div>
 </div>
@@ -2153,7 +2154,7 @@ body.authenticated #authGate{display:none}
 const SUPABASE_URL="https://jgxbxihxelxigngkdfdb.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_iIAwlqz8hfFgSk9M0ex6PQ_7B4lBCK9";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-let authUser=null, remotePlanId=null, remoteSaveTimer=null, authBusy=false, currentGroupId=null, isHydrating=false;
+let authUser=null, remotePlanId=null, remoteSaveTimer=null, authBusy=false, currentGroupId=null, isHydrating=false, workspaceOpening=null, confirmationCooldown=false;
 const userStorage={
  getItem(k){return authUser?localStorage.getItem("rg-user-"+authUser.id+":"+k):null},
  setItem(k,v){if(authUser)localStorage.setItem("rg-user-"+authUser.id+":"+k,v)},
@@ -2539,6 +2540,31 @@ function setAuthMode(mode){
  document.getElementById("authSubmit").textContent=mode==="signup"?"Criar conta":mode==="recovery"?"Salvar nova senha":"Entrar";
  document.getElementById("authPassword").autocomplete=mode==="login"?"current-password":"new-password";
  document.getElementById("authMessage").textContent="";
+ const resend=document.getElementById("resendConfirmation");if(resend)resend.style.display="none";
+}
+async function openUserWorkspace(user){
+ if(!user)return;
+ if(authUser?.id===user.id&&document.body.classList.contains("authenticated"))return;
+ if(workspaceOpening)return workspaceOpening;
+ workspaceOpening=hydrateWorkspace(user).finally(()=>{workspaceOpening=null});
+ return workspaceOpening;
+}
+async function resendConfirmation(){
+ const email=document.getElementById("authEmail").value.trim().toLowerCase();
+ const button=document.getElementById("resendConfirmation");
+ if(!email){authMessage("Informe seu e-mail para reenviar a confirmação.",true);return}
+ if(confirmationCooldown)return;
+ confirmationCooldown=true;if(button)button.disabled=true;
+ try{
+  const {error}=await sb.auth.resend({type:"signup",email,options:{emailRedirectTo:location.origin+location.pathname+location.search}});
+  if(error)throw error;
+  authMessage("Solicitação enviada. Confira sua caixa de entrada e o spam. Aguarde antes de solicitar outro envio.");
+ }catch(e){
+  const m=String(e.message||"");
+  authMessage(/rate.?limit|too many requests|over_email_send_rate_limit/i.test(m)?"O envio está temporariamente limitado. Aguarde o prazo indicado pelo serviço antes de tentar novamente.":m||"Não foi possível reenviar a confirmação.",true);
+ }finally{
+  setTimeout(()=>{confirmationCooldown=false;if(button)button.disabled=false},60000);
+ }
 }
 function authMessage(message,error=false){
  const el=document.getElementById("authMessage"); if(el){el.textContent=message;el.style.color=error?"#b42318":"#344054";}
@@ -2547,22 +2573,39 @@ async function submitAuth(event){
  event.preventDefault(); if(authBusy)return; authBusy=true;
  const email=document.getElementById("authEmail").value.trim().toLowerCase();
  const password=document.getElementById("authPassword").value;
- document.getElementById("authSubmit").disabled=true;
+ const submit=document.getElementById("authSubmit");submit.disabled=true;
  try{
   if(authMode==="recovery"){
-   const {data,error}=await sb.auth.updateUser({password}); if(error)throw error;
-   authMessage("Senha atualizada. Entrando no seu espaço...");
-   if(data.user)await hydrateWorkspace(data.user);
+   const {data,error}=await sb.auth.updateUser({password});if(error)throw error;
+   if(data.user)await openUserWorkspace(data.user);
+   authMessage("Senha atualizada. Seu espaço está sendo aberto.");
   }else if(authMode==="signup"){
    const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname+location.search}});
    if(error)throw error;
-   if(!data.session)authMessage("Conta criada. Confirme seu e-mail pelo link enviado para concluir o primeiro acesso.");
-   else authMessage("Conta criada. Carregando seu espaço...");
+   if(data.session&&data.user){
+    await openUserWorkspace(data.user);
+    authMessage("Conta criada. Bem-vindo ao seu espaço Rota Global.");
+   }else{
+    setAuthMode("login");
+    document.getElementById("resendConfirmation").style.display="inline-flex";
+    authMessage("Seu cadastro foi registrado, mas o acesso ainda depende da confirmação do e-mail. Abra a mensagem enviada pelo Supabase e toque em Confirmar e-mail. Depois você entrará automaticamente no Rota Global. Confira também Spam e Promoções.");
+   }
   }else{
-   const {error}=await sb.auth.signInWithPassword({email,password}); if(error)throw error;
+   const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;
+   await openUserWorkspace(data.user);
+   authMessage("Acesso confirmado. Carregando seu espaço...");
   }
- }catch(e){const raw=String(e.message||"");const rate=/rate.?limit|too many requests|request limit|over_email_send_rate_limit/i.test(raw);authMessage(rate?"O serviço de autenticação atingiu o limite temporário de solicitações. Aguarde um pouco antes de tentar novamente. Se continuar, verifique os limites de envio de e-mail no painel do Supabase.":(raw||"Não foi possível autenticar."),true)}
- finally{authBusy=false;document.getElementById("authSubmit").disabled=false}
+ }catch(e){
+  const raw=String(e.message||"");const code=String(e.code||e.status||"");
+  if(/email not confirmed/i.test(raw)||code==="email_not_confirmed"){
+   document.getElementById("resendConfirmation").style.display="inline-flex";
+   authMessage("Seu cadastro existe, mas o e-mail ainda não foi confirmado. Abra o link de confirmação enviado para sua caixa de entrada. Se não encontrar, use Reenviar e-mail de confirmação.",true);
+  }else if(/rate.?limit|too many requests|request limit|over_email_send_rate_limit/i.test(raw)){
+   authMessage("O envio de confirmação atingiu o limite temporário de segurança. Não tente criar a conta novamente agora. Aguarde e confira o e-mail já enviado, inclusive Spam e Promoções.",true);
+  }else{
+   authMessage(raw||"Não foi possível concluir o acesso. Verifique os dados e tente novamente.",true);
+  }
+ }finally{authBusy=false;submit.disabled=false}
 }
 async function resetPassword(){
  const email=document.getElementById("authEmail").value.trim();
@@ -2621,11 +2664,12 @@ async function persistWorkspace(){
 async function startAuth(){
  sb.auth.onAuthStateChange((event,session)=>{
   if(event==="PASSWORD_RECOVERY"){setAuthMode("recovery");authMessage("Digite sua nova senha para concluir a recuperação.");return;}
-  if(session?.user){if(authUser?.id!==session.user.id)queueMicrotask(()=>hydrateWorkspace(session.user).catch(e=>authMessage(e.message,true)))}
+  if(session?.user){queueMicrotask(()=>openUserWorkspace(session.user).catch(e=>authMessage("A sessão foi validada, mas não foi possível carregar seu espaço: "+e.message,true)))}
   else{authUser=null;remotePlanId=null;document.body.classList.remove("authenticated");}
  });
- const {data:{session}}=await sb.auth.getSession();
- if(session?.user&&!authUser){try{await hydrateWorkspace(session.user)}catch(e){authMessage(e.message,true)}}
+ const {data:{session},error}=await sb.auth.getSession();
+ if(error)authMessage("Não foi possível verificar sua sessão. Entre novamente.",true);
+ if(session?.user){try{await openUserWorkspace(session.user)}catch(e){authMessage("Sua sessão existe, mas houve um erro ao abrir seu espaço: "+e.message,true)}}
 }
 document.addEventListener("change",e=>{if(e.target?.id==="groupSelect")currentGroupId=e.target.value||null;});
 async function refreshGroups(){
